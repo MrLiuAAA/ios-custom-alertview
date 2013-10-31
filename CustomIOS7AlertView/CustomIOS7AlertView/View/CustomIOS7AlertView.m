@@ -2,7 +2,7 @@
 //  CustomIOS7AlertView.m
 //  CustomIOS7AlertView
 //
-//  Created by Richard on 20/09/2013.
+//  Created by Richard on 20/09/2013. Modified by Quentin Rousseau on 31/10/2013.
 //  Copyright (c) 2013 Wimagguc.
 //
 //  Lincesed under The MIT License (MIT)
@@ -12,9 +12,12 @@
 #import "CustomIOS7AlertView.h"
 #import <QuartzCore/QuartzCore.h>
 
+
+#define kCustomIOS7DefaultButtonColor [UIColor colorWithRed:0.670f green:0.670f blue:0.670f alpha:1.0f]
+
 const static CGFloat kCustomIOS7AlertViewDefaultButtonHeight       = 50;
 const static CGFloat kCustomIOS7AlertViewDefaultButtonSpacerHeight = 1;
-const static CGFloat kCustomIOS7AlertViewCornerRadius              = 7;
+const static CGFloat kCustomIOS7AlertViewCornerRadius              = 0;
 const static CGFloat kCustomIOS7MotionEffectExtent                 = 10.0;
 
 @implementation CustomIOS7AlertView
@@ -25,6 +28,7 @@ CGFloat buttonSpacerHeight = 0;
 @synthesize parentView, containerView, dialogView, buttonView, onButtonTouchUpInside;
 @synthesize delegate;
 @synthesize buttonTitles;
+@synthesize buttonColors;
 @synthesize useMotionEffects;
 
 - (id)initWithParentView: (UIView *)_parentView
@@ -42,6 +46,7 @@ CGFloat buttonSpacerHeight = 0;
         delegate = self;
         useMotionEffects = false;
         buttonTitles = @[@"Close"];
+        buttonColors = @[kCustomIOS7DefaultButtonColor];
     }
     return self;
 }
@@ -109,6 +114,44 @@ CGFloat buttonSpacerHeight = 0;
      ];
 }
 
++ (CustomIOS7AlertView *) alertWithTitle:(NSString *)title message:(NSString *)message
+{
+  CustomIOS7AlertView* alertView = [[CustomIOS7AlertView alloc] init];
+  
+  UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, alertView.bounds.size.width - 40, 100)];
+  
+  // Add some custom content to the alert view
+  UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, view.bounds.size.width - 40, 100)];
+  titleLabel.numberOfLines = 0;
+  titleLabel.text = title;
+  titleLabel.font = [UIFont boldSystemFontOfSize:25.0f];
+  titleLabel.textAlignment = NSTextAlignmentCenter;
+  [titleLabel sizeToFit];
+  
+  [view addSubview:titleLabel];
+  
+  // Add some custom content to the alert view
+  UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, titleLabel.frame.origin.y + titleLabel.frame.size.height + 10, view.bounds.size.width - 40, 100)];
+
+  messageLabel.numberOfLines = 0;
+  messageLabel.text = message;
+  messageLabel.font = [UIFont systemFontOfSize:18.0f];
+  messageLabel.textAlignment = NSTextAlignmentCenter;
+  [messageLabel sizeToFit];
+  
+  [view addSubview:messageLabel];
+  
+  CGRect frame = view.frame;
+  frame.size.height = titleLabel.bounds.size.height + messageLabel.bounds.size.height + 30;
+  view.frame = frame;
+  
+  [alertView setContainerView:view];
+  
+  [alertView setUseMotionEffects:true];
+  
+  return alertView;
+}
+
 // Button has touched
 - (IBAction)customIOS7dialogButtonTouchUpInside:(id)sender
 {
@@ -124,7 +167,6 @@ CGFloat buttonSpacerHeight = 0;
 // Default button behaviour
 - (void)customIOS7dialogButtonTouchUpInside: (CustomIOS7AlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSLog(@"Button Clicked! %d, %d", buttonIndex, [alertView tag]);
     [self close];
 }
 
@@ -170,7 +212,7 @@ CGFloat buttonSpacerHeight = 0;
     }
 
     CGFloat dialogWidth = containerView.frame.size.width;
-    CGFloat dialogHeight = containerView.frame.size.height + buttonHeight + buttonSpacerHeight;
+    CGFloat dialogHeight = containerView.frame.size.height + (buttonHeight + buttonSpacerHeight) * [buttonTitles count] ;
 
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
@@ -207,13 +249,6 @@ CGFloat buttonSpacerHeight = 0;
     dialogContainer.layer.shadowRadius = cornerRadius + 5;
     dialogContainer.layer.shadowOpacity = 0.1f;
     dialogContainer.layer.shadowOffset = CGSizeMake(0 - (cornerRadius+5)/2, 0 - (cornerRadius+5)/2);
-    // ^^^
-
-    // There is a line above the button
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, dialogContainer.bounds.size.height - buttonHeight - buttonSpacerHeight, dialogContainer.bounds.size.width, buttonSpacerHeight)];
-    lineView.backgroundColor = [UIColor colorWithRed:198.0/255.0 green:198.0/255.0 blue:198.0/255.0 alpha:1.0f];
-    [dialogContainer addSubview:lineView];
-    // ^^^
 
     // Add the custom container if there is any
     [dialogContainer addSubview:containerView];
@@ -226,21 +261,23 @@ CGFloat buttonSpacerHeight = 0;
 
 - (void)addButtonsToView: (UIView *)container
 {
-    CGFloat buttonWidth = container.bounds.size.width / [buttonTitles count];
-
-    for (int i=0; i<[buttonTitles count]; i++) {
-
+    for (int i = 0; i < [buttonTitles count]; i++)
+    {
         UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
 
-        [closeButton setFrame:CGRectMake(i * buttonWidth, container.bounds.size.height - buttonHeight, buttonWidth, buttonHeight)];
+        [closeButton setFrame:CGRectMake(0, container.bounds.size.height - ([buttonTitles count] - i) * (buttonHeight + buttonSpacerHeight), self.containerView.bounds.size.width, buttonHeight)];
 
         [closeButton addTarget:self action:@selector(customIOS7dialogButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [closeButton setTag:i];
-
         [closeButton setTitle:[buttonTitles objectAtIndex:i] forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f] forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor colorWithRed:0.2f green:0.2f blue:0.2f alpha:0.5f] forState:UIControlStateHighlighted];
-        [closeButton.titleLabel setFont:[UIFont boldSystemFontOfSize:14.0f]];
+      
+        if([buttonColors count] > i && [buttonColors objectAtIndex:i])
+             [closeButton setBackgroundColor:[buttonColors objectAtIndex:i]];
+        else [closeButton setBackgroundColor:kCustomIOS7DefaultButtonColor];
+      
+        [closeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [closeButton setTitleColor:[UIColor blackColor] forState:UIControlStateHighlighted];
+        [closeButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
         [closeButton.layer setCornerRadius:kCustomIOS7AlertViewCornerRadius];
 
         [container addSubview:closeButton];

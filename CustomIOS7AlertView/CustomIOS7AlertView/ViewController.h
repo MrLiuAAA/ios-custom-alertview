@@ -2,7 +2,7 @@
 //  ViewController.h
 //  CustomIOS7AlertView
 //
-//  Created by Richard on 20/09/2013.
+//  Created by Richard on 20/09/2013. Modified by Quentin Rousseau on 31/10/2013.
 //  Copyright (c) 2013 Wimagguc.
 //
 //  Lincesed under The MIT License (MIT)

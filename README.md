@@ -52,7 +52,13 @@ As simple as adding the following files to your project:
 * To add more buttons, pass a list of titles
 
     ```
-    [alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Button1", @"Button2", @"Button3", nil]];
+    [alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Shoot us a mail!", @"Try another demo!", @"Close", nil]];
+    ```
+
+* To add colors buttons, pass a list of colors
+
+    ```
+    [alertView setButtonColors:[NSMutableArray arrayWithObjects:[UIColor colorWithRed:255.0f/255.0f green:77.0f/255.0f blue:94.0f/255.0f alpha:1.0f],[UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f]], nil];
     ```
 
 * You can remove all buttons by passing nil
@@ -117,6 +123,7 @@ This is a really quick implementation, and there are a few things missing:
 
 ## Special thanks to
 
+* [@wimagguc](https://github.com/wimagguc/ios-custom-alertview) for the initial repository
 * [@tamasdancsi](https://github.com/tamasdancsi) for his support with the initial code  
 * [@dingosky](https://github.com/dingosky) for his work on the parallax effects code  
 * [@raspu](https://github.com/raspu) for his work on the protocol delegates, iOS6 support and onButtonClick blocks  
@@ -128,7 +135,7 @@ This is a really quick implementation, and there are a few things missing:
 
 `License info is here for request. Please suggest a better one if you are familiar with copyright.`
 
-Copyright (c) 2013 Richard Dancsi
+Copyright (c) 2013 Quentin Rousseau
 
 Lincesed under [The MIT License](http://opensource.org/licenses/MIT) (MIT)
 
@@ -152,19 +159,13 @@ THE SOFTWARE.
 
 ## Other projects
 
-`
-iOS developers, check out` [AppWoodoo](http://www.appwoodoo.com/)`, our remote app settings (and A/B testing) service. It's open source and free to use.
-`
-
-Some more of my free stuff for web devs at [Github](https://github.com/wimagguc?tab=repositories).
-
-Project updates [newsletter](http://wimagguc.us4.list-manage.com/subscribe/post?u=83343dbd708d35d76618f66c5&id=da7cc7f1dc)
+Some more of my free stuff for web devs at [Github](https://github.com/kwent?tab=repositories).
 
 ## About
 
-Richard Dancsi  
-[www.wimagguc.com](http://www.wimagguc.com/)  
+Quentin Rousseau  
+[www.quentinrousseau.fr](http://www.quentinrousseau.fr/)  
 
-twitter: [@wimagguc](http://twitter.com/wimagguc)  
-linkedin: [linkedin.com/in/richarddancsi](http://linkedin.com/in/richarddancsi)  
-gplus: [plus.google.com/u/0/115939246085616544919](https://plus.google.com/u/0/115939246085616544919)  
+twitter: [@quentinrousseau](http://twitter.com/quentinrousseau)  
+linkedin: [linkedin.com/in/quentinrousseau](https://www.linkedin.com/in/quentinrousseau)
+

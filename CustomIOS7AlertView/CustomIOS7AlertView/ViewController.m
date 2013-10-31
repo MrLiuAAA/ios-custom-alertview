@@ -2,7 +2,7 @@
 //  ViewController.m
 //  CustomIOS7AlertView
 //
-//  Created by Richard on 20/09/2013.
+//  Created by Richard on 20/09/2013. Modified by Quentin Rousseau on 31/10/2013.
 //  Copyright (c) 2013 Wimagguc.
 //
 //  Lincesed under The MIT License (MIT)
@@ -38,25 +38,14 @@
 
 - (IBAction)launchDialog:(id)sender
 {
-    // Here we need to pass a full frame
-    CustomIOS7AlertView *alertView = [[CustomIOS7AlertView alloc] init];
-
-    // Add some custom content to the alert view
-    [alertView setContainerView:[self createDemoView]];
-
-    // Modify the parameters
-    [alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Close1", @"Close2", @"Close3", nil]];
+    CustomIOS7AlertView *alertView = [CustomIOS7AlertView alertWithTitle:@"Thank you for trying this demo" message:@"If you liked what you saw,\nand are interesting in seeing\nwhat we can do together,\nplease shoot us a mail by tapping the button below."];
+    [alertView setButtonTitles:[NSMutableArray arrayWithObjects:@"Shoot us a mail!", @"Try another demo!", @"Close", nil]];
+    [alertView setButtonColors:[NSMutableArray arrayWithObjects:[UIColor colorWithRed:255.0f/255.0f green:77.0f/255.0f blue:94.0f/255.0f alpha:1.0f],[UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f],nil]];
     [alertView setDelegate:self];
-    
-    // You may use a Block, rather than a delegate.
     [alertView setOnButtonTouchUpInside:^(CustomIOS7AlertView *alertView, int buttonIndex) {
         NSLog(@"Block: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
         [alertView close];
     }];
-    
-    [alertView setUseMotionEffects:true];
-
-    // And launch the dialog
     [alertView show];
 }
 
@@ -64,17 +53,6 @@
 {
     NSLog(@"Delegate: Button at position %d is clicked on alertView %d.", buttonIndex, [alertView tag]);
     [alertView close];
-}
-
-- (UIView *)createDemoView
-{
-    UIView *demoView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 290, 200)];
-
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 270, 180)];
-    [imageView setImage:[UIImage imageNamed:@"demo"]];
-    [demoView addSubview:imageView];
-
-    return demoView;
 }
 
 @end
