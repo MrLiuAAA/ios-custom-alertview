@@ -128,6 +128,10 @@ CGFloat buttonSpacerHeight = 0;
   titleLabel.textAlignment = NSTextAlignmentCenter;
   [titleLabel sizeToFit];
   
+  CGRect frame = titleLabel.frame;
+  frame.size.width =  view.bounds.size.width - 40;
+  titleLabel.frame = frame;
+  
   [view addSubview:titleLabel];
   
   // Add some custom content to the alert view
@@ -139,11 +143,15 @@ CGFloat buttonSpacerHeight = 0;
   messageLabel.textAlignment = NSTextAlignmentCenter;
   [messageLabel sizeToFit];
   
+  CGRect frame2 = messageLabel.frame;
+  frame2.size.width =  view.bounds.size.width - 40;
+  messageLabel.frame = frame2;
+  
   [view addSubview:messageLabel];
   
-  CGRect frame = view.frame;
-  frame.size.height = titleLabel.bounds.size.height + messageLabel.bounds.size.height + 30;
-  view.frame = frame;
+  CGRect frame3 = view.frame;
+  frame3.size.height = titleLabel.bounds.size.height + messageLabel.bounds.size.height + 30;
+  view.frame = frame3;
   
   [alertView setContainerView:view];
   
